@@ -16,7 +16,7 @@ data used during playback.
 - [SPEC.md](SPEC.md): the specification ([日本語](SPEC.ja.md))
 - [CHANGELOG.md](CHANGELOG.md): format versions
 
-### Contents of a file
+### Stored data
 
 - Audio (`.kt3`): Ogg Opus. Older files may contain MP3, Ogg Vorbis, WAV or AAC
 - Video (`.kt4`): MP4 with VP9 video and Opus audio
@@ -51,7 +51,7 @@ You can implement the format in your own software. See [LICENSE](LICENSE).
 - [SPEC.ja.md](SPEC.ja.md)：仕様（[English](SPEC.md)）
 - [CHANGELOG.md](CHANGELOG.md)：形式の版ごとの変更
 
-### ファイルに入るもの
+### 格納するデータ
 
 - 音声（`.kt3`）：Ogg Opus。古いファイルでは MP3・Ogg Vorbis・WAV・AAC のこともあります
 - 動画（`.kt4`）：MP4（映像は VP9、音声は Opus）
