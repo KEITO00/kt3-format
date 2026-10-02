@@ -6,11 +6,10 @@ This document describes the `.kt3` (audio) and `.kt4` (video) file formats used 
 [KT3 Player](https://github.com/KEITO00/kt3-player) and
 [KT3 Creator](https://github.com/KEITO00/kt3-creator).
 
-A KT file is a single file that holds one track together with everything needed to
-perform it: the audio (or a music video), loop points, lyrics, beat information,
-visual cues and an optional vocal / instrumental split. The video variant is designed
-so that a player can show **any frame at any moment with a bounded amount of work**,
-which makes it possible to scratch a music video like a record, even in a web browser.
+A KT file contains the audio (or a music video) together with loop points, lyrics, BPM,
+chorus sections, spark cue times, an optional vocal and instrumental track, and a
+thumbnail. In `.kt4` version 6, any frame of the video can be decoded from at most two
+samples, so a player can seek and scratch without decoding long runs of frames.
 
 The key words "MUST", "SHOULD" and "MAY" are used as described in RFC 2119.
 
