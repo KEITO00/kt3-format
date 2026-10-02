@@ -1,0 +1,41 @@
+KT3 / KT4 File Format Specification
+Copyright (c) 2026 keitodaze
+
+The specification documents in this repository (SPEC.md, SPEC.ja.md, CHANGELOG.md and
+README.md) are licensed under the Creative Commons Attribution 4.0 International License
+(CC BY 4.0).
+
+  Summary: https://creativecommons.org/licenses/by/4.0/
+  Legal code: https://creativecommons.org/licenses/by/4.0/legalcode
+
+You may implement the KT3 / KT4 file format in any software, commercial or not, without
+asking for permission. When you share or adapt the documents themselves, give credit to
+"keitodaze" and link to this repository.
+
+This license covers the specification only. It does not cover:
+
+- the KT3 Player and KT3 Creator applications, which have their own terms;
+- the names "KT3", "KT3 Player" and "KT3 Creator". You may say that your software
+  "supports KT3 / KT4 files", but please do not use these names in a way that suggests
+  your software is KT3 Player or KT3 Creator, or is made by keitodaze.
+
+------------------------------------------------------------------------------------
+
+KT3 / KT4 ファイル形式 仕様
+Copyright (c) 2026 keitodaze
+
+このリポジトリの仕様の文書（SPEC.md、SPEC.ja.md、CHANGELOG.md、README.md）は、
+クリエイティブ・コモンズ 表示 4.0 国際（CC BY 4.0）で公開しています。
+
+  概要: https://creativecommons.org/licenses/by/4.0/deed.ja
+  法的条項: https://creativecommons.org/licenses/by/4.0/legalcode.ja
+
+KT3 / KT4 のファイル形式は、商用かどうかを問わず、許可なく自由にソフトに実装できます。
+文書そのものを共有・改変する時は、「keitodaze」の名前とこのリポジトリへのリンクを表示してください。
+
+このライセンスが対象とするのは仕様だけです。次のものは対象外です。
+
+- KT3 Player と KT3 Creator（それぞれの利用規約に従います）
+- 「KT3」「KT3 Player」「KT3 Creator」という名前。「KT3 / KT4 ファイルに対応」と書くことは
+  できますが、あなたのソフトが KT3 Player・KT3 Creator である、または keitodaze が作った、
+  と誤解されるような使い方はしないでください。
