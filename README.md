@@ -44,7 +44,7 @@ You can implement the format in your own software. See [LICENSE](LICENSE).
 [KT3 Creator](https://github.com/KEITO00/kt3-creator) で使う
 `.kt3`（音声）と `.kt4`（動画）のファイル形式の仕様です。
 
-音声や動画と一緒に、ループ位置・歌詞・BPM など、再生に使う情報を 1 つのファイルに入れています。
+音声や動画と一緒に、ループ位置・歌詞・BPM など、再生に使う情報を 1 つのファイルに格納しています。
 
 ### 文書
 
@@ -66,9 +66,9 @@ You can implement the format in your own software. See [LICENSE](LICENSE).
 
 一定の間隔でキーフレームを置き、それ以外のコマは直前のキーフレームだけを参照します。
 どのコマも最大 2 つのサンプルから作れるので、移動やスクラッチが軽く済みます。
-詳しくは [SPEC.ja.md の 6.3](SPEC.ja.md) を見てください。
+詳しくは [SPEC.ja.md の 6.3](SPEC.ja.md) を参照してください。
 
 ### ライセンス
 
 仕様は [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.ja) で公開しています。
-自分のソフトに自由に実装できます。詳しくは [LICENSE](LICENSE) を見てください。
+自分のソフトに自由に実装できます。詳しくは [LICENSE](LICENSE) を参照してください。
