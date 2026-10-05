@@ -7,13 +7,19 @@ KT3 files always use version 1.
 
 ## Meta `loops` — 2026-10-05
 
-- Up to 10 loops per track in `meta.loops`, each with a start, an end, a crossfade and an optional name.
-  Loop 1 is also written to the header for older players. The `version` byte does not change.
-  See [SPEC.md §3.1](SPEC.md#31-loops).
+- A track can have up to 10 loops in `meta.loops`.
+  - Each loop has a start, an end, a crossfade and an optional name.
+- Loop 1 is also written to the header.
+  - This lets older players still repeat loop 1.
+- The `version` byte does not change.
+- See [SPEC.md §3.1](SPEC.md#31-loops).
 
-- 情報欄の `loops` で、1 つの曲にループを最大 10 個持てるようにした。それぞれ開始・終了・クロスフェード・名前（任意）を持つ。
-  古いプレイヤーのために、ループ 1 はヘッダーにも書く。`version` は変えない。
-  [SPEC.ja.md 3.1](SPEC.ja.md) を参照。
+- 情報欄の `loops` で、1 つの曲にループを最大 10 個持てるようにした。
+  - それぞれのループは、開始・終了・クロスフェード・名前（任意）を持つ。
+- ループ 1 は、ヘッダーにも書く。
+  - 古いプレイヤーでも、ループ 1 でくり返せるようにするため。
+- `version` は変えない。
+- [SPEC.ja.md 3.1](SPEC.ja.md) を参照。
 
 ## Version 6 — 2026-10-02
 

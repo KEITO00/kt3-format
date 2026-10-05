@@ -20,7 +20,7 @@ data used during playback.
 
 - Audio (`.kt3`): Ogg Opus. Older files may contain MP3, Ogg Vorbis, WAV or AAC
 - Video (`.kt4`): MP4 with VP9 video and Opus audio
-- Up to 10 loops, each with a start and end (64-bit float seconds), a crossfade and an optional name
+- Loops, up to 10: start and end (64-bit float seconds), crossfade and an optional name
 - Lyrics, up to two lines
 - BPM, beat grid and meter changes
 - Chorus sections and spark cue times
@@ -30,8 +30,11 @@ data used during playback.
 ### Video in `.kt4` (version 6)
 
 Key frames are placed at a fixed interval, and every other frame references only the
-preceding key frame. Any frame can be decoded from at most two samples, so seeking and
-scratching stay cheap. See [SPEC.md §6.3](SPEC.md#63-version-6-anchor-reference-video).
+preceding key frame.
+
+- Any frame can be decoded from at most two samples.
+  - This keeps seeking and scratching cheap.
+- See [SPEC.md §6.3](SPEC.md#63-version-6-anchor-reference-video) for details.
 
 ### License
 
@@ -55,7 +58,7 @@ You can implement the format in your own software. See [LICENSE](LICENSE).
 
 - 音声（`.kt3`）：Ogg Opus。古いファイルでは MP3・Ogg Vorbis・WAV・AAC のこともあります
 - 動画（`.kt4`）：MP4（映像は VP9、音声は Opus）
-- ループ（最大 10 個。それぞれ開始と終了〈秒・64 ビット浮動小数点数〉、クロスフェード、名前〈任意〉）
+- ループ（最大 10 個）：開始と終了（秒・64 ビット浮動小数点数）、クロスフェード、名前（任意）
 - 歌詞（2 行まで）
 - BPM、拍の位置、拍子の変化
 - サビの区間、火花のタイミング
@@ -65,8 +68,10 @@ You can implement the format in your own software. See [LICENSE](LICENSE).
 ### `.kt4` の動画（version 6）
 
 一定の間隔でキーフレームを置き、それ以外のコマは直前のキーフレームだけを参照します。
-どのコマも最大 2 つのサンプルから作れるので、移動やスクラッチが軽く済みます。
-詳しくは [SPEC.ja.md の 6.3](SPEC.ja.md) を参照してください。
+
+- どのコマも、最大 2 つのサンプルから作れます。
+  - そのため、移動やスクラッチが軽く済みます。
+- 詳しくは [SPEC.ja.md の 6.3](SPEC.ja.md) を参照してください。
 
 ### ライセンス
 
