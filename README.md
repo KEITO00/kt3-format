@@ -20,7 +20,7 @@ data used during playback.
 
 - Audio (`.kt3`): Ogg Opus. Older files may contain MP3, Ogg Vorbis, WAV or AAC
 - Video (`.kt4`): MP4 with VP9 video and Opus audio
-- Loop start and end (64-bit float seconds)
+- Up to 10 loops, each with a start and end (64-bit float seconds), a crossfade and an optional name
 - Lyrics, up to two lines
 - BPM, beat grid and meter changes
 - Chorus sections and spark cue times
@@ -55,7 +55,7 @@ You can implement the format in your own software. See [LICENSE](LICENSE).
 
 - 音声（`.kt3`）：Ogg Opus。古いファイルでは MP3・Ogg Vorbis・WAV・AAC のこともあります
 - 動画（`.kt4`）：MP4（映像は VP9、音声は Opus）
-- ループの開始と終了（秒・64 ビット浮動小数点数）
+- ループ（最大 10 個。それぞれ開始と終了〈秒・64 ビット浮動小数点数〉、クロスフェード、名前〈任意〉）
 - 歌詞（2 行まで）
 - BPM、拍の位置、拍子の変化
 - サビの区間、火花のタイミング

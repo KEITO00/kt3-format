@@ -48,12 +48,12 @@ All integers are little-endian. All times are in seconds from the start of the t
 | 4 | 1 | u8 | version | Storage version (see 2.1) |
 | 5 | 1 | u8 | mediaFormat | Hint for the media type (see 2.2) |
 | 6 | 2 | — | reserved | 0 |
-| 8 | 8 | f64 | loopStart | Loop start time |
-| 16 | 8 | f64 | loopEnd | Loop end time. 0 means the end of the track |
+| 8 | 8 | f64 | loopStart | Loop start time (loop 1, see 3.1) |
+| 16 | 8 | f64 | loopEnd | Loop end time. 0 means the end of the track (loop 1, see 3.1) |
 | 24 | 4 | u32 | metaLen | Size of the Meta section |
 | 28 | 4 | u32 | lyricsLen | Size of the Lyrics section |
 | 32 | 4 | u32 | mediaLen | Size of the Media section |
-| 36 | 2 | u16 | crossfadeMs | Crossfade length used at the loop point, in milliseconds. 0 = none |
+| 36 | 2 | u16 | crossfadeMs | Crossfade length used at the loop point, in milliseconds. 0 = none (loop 1, see 3.1) |
 | 38 | 4 | u32 | sparkLen | Size of the Sparks section |
 | 42 | 4 | u32 | frameCacheLen | Size of the legacy Frame cache section. 0 in current files |
 | 46 | 2 | — | reserved | 0 |
@@ -98,8 +98,29 @@ except `title` and `artist`.
 | `beatMap` | array of `{ t, beats, bpm? }` | Changes of meter, sorted by `t`. At time `t` a new bar starts (`t` is its first beat), the bar has `beats` beats from then on, and the tempo becomes `bpm` if given |
 | `chorusSections` | array of `{ start, end, bpm, offset }` | Chorus sections. Players MAY flash the screen on the beat (`offset + n * 60 / bpm`) inside a section |
 | `gain` | number | Playback gain applied to all audio. Default 1 |
+| `loops` | array of `{ start, end, crossfadeMs?, name? }` | List of loops (see 3.1) |
 | `stems` | object | Present when stems are stored (see section 7) |
 | `thumbnailLen` | integer | Size of the Thumbnail section (see section 8) |
+
+### 3.1 Loops
+
+A track can have up to 10 loops. This is for tracks such as game music, where the part that repeats depends on the scene.
+
+| Key | Type | Description |
+|---|---|---|
+| `start` | number | Loop start time (seconds) |
+| `end` | number | Loop end time (seconds). 0 means the end of the track |
+| `crossfadeMs` | integer | Crossfade length at the loop point (milliseconds). Default 0 |
+| `name` | string | Display name (up to 24 characters). Without it, players show a number such as "Loop 1" |
+
+- The first entry of `loops` is called loop 1.
+- Writers MUST also write loop 1 into `loopStart`, `loopEnd` and `crossfadeMs` of the header.
+  - This lets older players that do not know `loops` still repeat loop 1.
+- Without `loops`, the track has only the loop in the header (loop 1).
+- Readers ignore an entry whose `end` is greater than 0 and not after `start`.
+- A player SHOULD repeat only the one loop the user selected. Loop 1 is selected at first.
+- When another loop is selected during playback, a player SHOULD keep playing from the current position and go back to the start of the new loop when it reaches the end of the new loop.
+  - If the current position is after the end of the new loop, the player SHOULD move to the start of the new loop right away.
 
 ## 4. Lyrics (line 1)
 

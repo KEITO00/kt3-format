@@ -5,6 +5,16 @@ KT3 files always use version 1.
 
 ヘッダーの `version` は、KT4 の動画の格納方式を表します。KT3 は常に 1 です。
 
+## Meta `loops` — 2026-10-05
+
+- Up to 10 loops per track in `meta.loops`, each with a start, an end, a crossfade and an optional name.
+  Loop 1 is also written to the header for older players. The `version` byte does not change.
+  See [SPEC.md §3.1](SPEC.md#31-loops).
+
+- 情報欄の `loops` で、1 つの曲にループを最大 10 個持てるようにした。それぞれ開始・終了・クロスフェード・名前（任意）を持つ。
+  古いプレイヤーのために、ループ 1 はヘッダーにも書く。`version` は変えない。
+  [SPEC.ja.md 3.1](SPEC.ja.md) を参照。
+
 ## Version 6 — 2026-10-02
 
 - KT4 video is an anchor-reference MP4: anchor key frames at a fixed interval, and every
