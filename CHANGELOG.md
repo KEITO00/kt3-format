@@ -1,9 +1,35 @@
 # Changelog / 変更履歴
 
-The `version` byte of the header describes how the video of a KT4 file is stored.
+The `version` byte of the header describes how a KT4 file stores its video and audio.
 KT3 files always use version 1.
 
-ヘッダーの `version` は、KT4 の動画の格納方式を表します。KT3 は常に 1 です。
+ヘッダーの `version` は、KT4 の動画と音声の持ち方を表します。KT3 は常に 1 です。
+
+## Version 7 (KTC audio) and scene-adaptive anchors — 2026-10-07
+
+- `mediaFormat` 5 means KTC, an audio compression format designed mainly for use with KT3.
+  - Current writers produce KTC for KT3 audio and stems.
+  - See [SPEC.md §2.2](SPEC.md#22-mediaformat).
+- KT4 version 7 stores the audio as KTC outside the MP4.
+  - The MP4 contains only video.
+  - The audio comes before the stems, and its size is `meta.audioLen`.
+  - This makes the audio of KT3 and KT4 the same format.
+  - See [SPEC.md §6.5](SPEC.md#65-kt4-audio).
+- Current writers place KT4 anchor frames to fit the scene instead of every 8 frames.
+  - Calm scenes get longer intervals (up to 240 frames), which makes the video smaller.
+  - Readers already find anchors from `stss`, so they need no change.
+
+- `mediaFormat` の 5 を、主に KT3 の利用を目的とした独自の音声圧縮方式 KTC にした。
+  - 今の作成アプリは、KT3 の音声と分離音源を KTC で書く。
+  - [SPEC.ja.md 2.2](SPEC.ja.md) を参照。
+- KT4 の version 7 では、音声を MP4 の外に KTC で持つようにした。
+  - MP4 は映像だけにする。
+  - 音声は分離音源の前に入り、大きさは `meta.audioLen` に書く。
+  - KT3 と KT4 の音声を、同じ形式にそろえるため。
+  - [SPEC.ja.md 6.5](SPEC.ja.md) を参照。
+- 今の作成アプリは、KT4 の基準のコマを 8 コマごとではなく、場面に合わせて置くようにした。
+  - 動きの少ない場面では間隔が長くなり（最大 240 コマ）、動画が小さくなる。
+  - 読む側はすでに `stss` から基準のコマを求めているので、変更は要らない。
 
 ## Meta `loops` — 2026-10-05
 

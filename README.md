@@ -18,8 +18,8 @@ data used during playback.
 
 ### Stored data
 
-- Audio (`.kt3`): Ogg Opus. Older files may contain MP3, Ogg Vorbis, WAV or AAC
-- Video (`.kt4`): MP4 with VP9 video and Opus audio
+- Audio (`.kt3`): [KTC](https://github.com/KEITO00/ktc) (an audio compression format designed mainly for use with KT3). Older files may contain Ogg Opus, MP3, Ogg Vorbis, WAV or AAC
+- Video (`.kt4`): MP4 with VP9 video, and KTC audio stored outside the MP4. Older files have Opus audio inside the MP4
 - Loops, up to 10: start and end (64-bit float seconds), crossfade and an optional name
 - Lyrics, up to two lines
 - BPM, beat grid and meter changes
@@ -27,10 +27,10 @@ data used during playback.
 - Vocal and instrumental tracks (optional)
 - Thumbnail (WebP, optional)
 
-### Video in `.kt4` (version 6)
+### Video in `.kt4` (version 6 and later)
 
-Key frames are placed at a fixed interval, and every other frame references only the
-preceding key frame.
+Key frames are placed where the picture has changed enough, and every other frame
+references only the preceding key frame.
 
 - Any frame can be decoded from at most two samples.
   - This keeps seeking and scratching cheap.
@@ -56,8 +56,8 @@ You can implement the format in your own software. See [LICENSE](LICENSE).
 
 ### 格納するデータ
 
-- 音声（`.kt3`）：Ogg Opus。古いファイルでは MP3・Ogg Vorbis・WAV・AAC のこともあります
-- 動画（`.kt4`）：MP4（映像は VP9、音声は Opus）
+- 音声（`.kt3`）：[KTC](https://github.com/KEITO00/ktc)（主に KT3 の利用を目的とした独自の音声圧縮方式）。古いファイルでは Ogg Opus・MP3・Ogg Vorbis・WAV・AAC のこともあります
+- 動画（`.kt4`）：MP4（映像は VP9）と、MP4 の外に持つ KTC の音声。古いファイルでは、音声は MP4 の中の Opus です
 - ループ（最大 10 個）：開始と終了（秒・64 ビット浮動小数点数）、クロスフェード、名前（任意）
 - 歌詞（2 行まで）
 - BPM、拍の位置、拍子の変化
@@ -65,9 +65,9 @@ You can implement the format in your own software. See [LICENSE](LICENSE).
 - ボーカルとインストの音声（任意）
 - サムネイル（WebP・任意）
 
-### `.kt4` の動画（version 6）
+### `.kt4` の動画（version 6 以降）
 
-一定の間隔でキーフレームを置き、それ以外のコマは直前のキーフレームだけを参照します。
+絵が十分に変わった所にキーフレームを置き、それ以外のコマは直前のキーフレームだけを参照します。
 
 - どのコマも、最大 2 つのサンプルから作れます。
   - そのため、移動やスクラッチが軽く済みます。

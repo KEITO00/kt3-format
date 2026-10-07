@@ -10,7 +10,7 @@ A KT file contains the audio (or a music video) together with loop points, lyric
 chorus sections, spark cue times, an optional vocal and instrumental track, and a
 thumbnail.
 
-- In `.kt4` version 6, any frame of the video can be decoded from at most two samples.
+- In `.kt4` version 6 and later, any frame of the video can be decoded from at most two samples.
   - This lets a player seek and scratch without decoding long runs of frames.
 
 The key words "MUST", "SHOULD" and "MAY" are used as described in RFC 2119.
@@ -30,6 +30,8 @@ The key words "MUST", "SHOULD" and "MAY" are used as described in RFC 2119.
 | Sparks                   |  sparkLen bytes
 +--------------------------+
 | Frame cache (legacy)     |  frameCacheLen bytes, 0 in current files
++--------------------------+
+| Audio (KT4 version 7)    |  meta.audioLen bytes (optional)
 +--------------------------+
 | Vocal stem               |  meta.stems.vocalLen bytes (optional)
 +--------------------------+
@@ -66,16 +68,16 @@ All integers are little-endian. All times are in seconds from the start of the t
 
 ### 2.1 version
 
-`version` describes **how the video is stored**. It does not describe the audio codec.
+`version` describes **how a KT4 file stores its video and audio**. It does not describe the audio format of KT3 files.
 
 - KT3 files always use version `1`.
-- KT4 files use versions `1` to `6` (see section 6).
-  - Writers SHOULD use `6`.
+- KT4 files use versions `1` to `7` (see section 6).
+  - Writers SHOULD use `7`.
 
 ### 2.2 mediaFormat
 
 `mediaFormat` is only a hint. Readers SHOULD detect the real format from the data itself
-(for example the `OggS` / `OpusHead` signature, or the MP4 sample entries).
+(for example the `KTC` or `OggS` / `OpusHead` signature, or the MP4 sample entries).
 
 | Value | KT3 | KT4 |
 |---|---|---|
@@ -84,6 +86,11 @@ All integers are little-endian. All times are in seconds from the start of the t
 | 2 | WAV | — |
 | 3 | M4A (AAC) | — |
 | 4 | Ogg Opus | — |
+| 5 | KTC | — |
+
+- KTC is an audio compression format designed mainly for use with KT3.
+  - A KTC file starts with the four bytes `K` `T` `C` `0x00`.
+  - It is described in its own specification (SPEC.md in the [ktc repository](https://github.com/KEITO00/ktc)).
 
 ## 3. Meta
 
@@ -103,6 +110,7 @@ except `title` and `artist`.
 | `chorusSections` | array of `{ start, end, bpm, offset }` | Chorus sections. Players MAY flash the screen on the beat (`offset + n * 60 / bpm`) inside a section |
 | `gain` | number | Playback gain applied to all audio. Default 1 |
 | `loops` | array of `{ start, end, crossfadeMs?, name? }` | List of loops (see 3.1) |
+| `audioLen` | integer | Size of the audio of a KT4 version 7 file (see 6.5) |
 | `stems` | object | Present when stems are stored (see section 7) |
 | `thumbnailLen` | integer | Size of the Thumbnail section (see section 8) |
 
@@ -154,14 +162,13 @@ A list of f32 times (`sparkLen / 4` entries). Players MAY play a visual effect (
 
 The Media section is a complete audio file.
 
-- Current writers produce **Ogg Opus**.
-- Older files may contain MP3, Ogg Vorbis, WAV or AAC (M4A).
+- Current writers produce **KTC** (2.2).
+- Older files may contain Ogg Opus, MP3, Ogg Vorbis, WAV or AAC (M4A).
 - `mediaLen` MAY be 0 when both stems are stored (section 7).
 
 ### 6.2 KT4: video
 
-The Media section is a video file. The audio track, if any, is inside the video file.
-How the video is stored depends on `version`:
+The Media section is a video file. How the video is stored depends on `version`:
 
 | version | Video | Scratching |
 |---|---|---|
@@ -170,9 +177,10 @@ How the video is stored depends on `version`:
 | 4 | A normal video, plus a frame cache that is a second, all-intra MP4 (6.4) | Uses the all-intra MP4 |
 | 5 | An all-intra MP4: every video sample is a sync sample | Any frame can be decoded alone |
 | 6 | **Anchor-reference MP4** (6.3) | Any frame can be decoded from at most two samples |
+| 7 | Same as version 6, except that the audio is stored outside the MP4 as KTC (6.5) | Same as version 6 |
 
-- Writers SHOULD use version 6.
-  - Current writers use VP9 video and Opus audio.
+- Writers SHOULD use version 7.
+  - Current writers use VP9 video.
 - The MP4 SHOULD be "fast start" (the `moov` box before `mdat`).
   - This lets a reader find every sample by reading only the beginning of the media.
 
@@ -182,7 +190,10 @@ Version 6 keeps the random access of an all-intra video while storing most frame
 small differences.
 
 - **Anchor frames** are key frames (sync samples).
-  - They appear at the start of the video and at a fixed interval (current writers: every 8 frames).
+  - They appear at the start of the video and wherever the picture has changed enough since the previous anchor.
+  - Current writers place an anchor every 8 frames in scenes with a lot of motion.
+  - In calm scenes, they let the interval grow up to 240 frames.
+  - They also place one at every scene change.
 - **Every other frame** is predicted **only from the most recent anchor frame**.
   - It does not reference any other frame.
   - It does not change any decoder state that a later frame could depend on (no reference buffer updates, no probability context updates).
@@ -216,6 +227,19 @@ Writer notes for VP9 (libvpx):
 | 3 | `u32 count`, `f32 time[count]`, `u32 offset[count]` (from the start of the section), `u32 length[count]`, then the images (WebP) |
 | 4 | An all-intra MP4 of the same video |
 
+### 6.5 KT4 audio
+
+- Up to version 6, the audio is the audio track inside the MP4.
+- In version 7, the MP4 contains only video, and the audio is stored separately as KTC (2.2).
+  - The audio follows the Frame cache section and comes before the vocal stem (section 1).
+  - Its size is `meta.audioLen`.
+  - It is located from the end of the file.
+    - The audio ends where the vocal stem begins.
+  - It uses the same format as KT3 audio.
+    - Therefore, KT3 and KT4 audio can be read the same way.
+- When both stems exist (section 7), the audio MAY be absent.
+  - In that case, `audioLen` is omitted.
+
 ## 7. Stems
 
 When `meta.stems` is present, the file contains a vocal and/or an instrumental part
@@ -230,11 +254,11 @@ right after the Frame cache section:
 - `vocalGain` and `instGain` are the gain for each part (default 1).
   - They are applied on top of `meta.gain`.
 - Each part is a complete audio file.
-  - Current writers produce Ogg Opus.
+  - Current writers produce KTC (2.2).
 - Each part is located from the end of the file.
   - The instrumental part ends where the Thumbnail begins, and the vocal part ends where the instrumental part begins.
 - When both parts exist, a player plays their sum and MAY let the user control them separately.
-  - In that case the main audio (KT3 Media, or the KT4 audio track) MAY be absent.
+  - In that case the main audio (KT3 Media, or the KT4 audio, see 6.5) MAY be absent.
 
 ## 8. Thumbnail
 
@@ -247,15 +271,15 @@ are a square WebP image (current writers: 320 × 320). It is used as the record 
 2. Read Meta and Lyrics (they follow the header).
 3. The Media section starts at `48 + metaLen + lyricsLen`.
 4. Sparks and the Frame cache follow the Media section.
-5. The Thumbnail and stems are located from the end of the file using the sizes in Meta.
+5. The Thumbnail, the stems and the audio of KT4 version 7 are located from the end of the file using the sizes in Meta.
 
 - A reader does not need to load the whole file.
-  - For KT4 version 5 and 6, a reader can read only the MP4 `moov` box and then fetch individual samples by their offsets.
+  - For KT4 versions 5 to 7, a reader can read only the MP4 `moov` box and then fetch individual samples by their offsets.
 
 ## 10. Compatibility rules
 
 - Readers MUST ignore unknown Meta keys.
-- Readers SHOULD accept every version from 1 to 6.
+- Readers SHOULD accept every version from 1 to 7.
 - New fields will be added to Meta, not to the header, whenever possible.
 
 ## 11. License
