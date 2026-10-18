@@ -30,12 +30,12 @@ Copyright (c) 2026 keitodaze
   概要: https://creativecommons.org/licenses/by/4.0/deed.ja
   法的条項: https://creativecommons.org/licenses/by/4.0/legalcode.ja
 
-KT3 / KT4 のファイル形式は、商用かどうかを問わず、許可なく自由にソフトに実装できます。
-文書そのものを共有・改変する時は、「keitodaze」の名前とこのリポジトリへのリンクを表示してください。
+KT3 / KT4 のファイル形式は、商用・非商用を問わず、許可を得ることなくソフトウェアに実装できます。
+文書そのものを共有・改変する場合は、「keitodaze」の名前とこのリポジトリへのリンクを表示してください。
 
-このライセンスが対象とするのは仕様だけです。次のものは対象外です。
+このライセンスの対象は、仕様のみです。次のものは対象外です。
 
 - KT3 Player と KT3 Creator（それぞれの利用規約に従います）
-- 「KT3」「KT3 Player」「KT3 Creator」という名前。「KT3 / KT4 ファイルに対応」と書くことは
-  できますが、あなたのソフトが KT3 Player・KT3 Creator である、または keitodaze が作った、
+- 「KT3」「KT3 Player」「KT3 Creator」という名前。「KT3 / KT4 ファイルに対応」と表記することは
+  できますが、あなたのソフトウェアが KT3 Player・KT3 Creator である、または keitodaze が作成した、
   と誤解されるような使い方はしないでください。

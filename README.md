@@ -44,21 +44,21 @@ You can implement the format in your own software. See [LICENSE](LICENSE).
 ## 日本語
 
 [KT3 Player](https://github.com/KEITO00/kt3-player) と
-[KT3 Creator](https://github.com/KEITO00/kt3-creator) で使う
+[KT3 Creator](https://github.com/KEITO00/kt3-creator) で使用する
 `.kt3`（音声）と `.kt4`（動画）のファイル形式の仕様です。
 
-音声や動画と一緒に、ループ位置・歌詞・BPM など、再生に使う情報を 1 つのファイルに格納しています。
+音声や動画とともに、ループ位置・歌詞・BPM など、再生に使用する情報を 1 つのファイルに格納します。
 
 ### 文書
 
 - [SPEC.ja.md](SPEC.ja.md)：仕様（[English](SPEC.md)）
-- [CHANGELOG.md](CHANGELOG.md)：形式の版ごとの変更
+- [CHANGELOG.md](CHANGELOG.md)：形式の版ごとの変更点
 
 ### 格納するデータ
 
-- 音声（`.kt3`）：[KTC](https://github.com/KEITO00/ktc)（主に KT3 の利用を目的とした独自の音声圧縮方式）。古いファイルでは Ogg Opus・MP3・Ogg Vorbis・WAV・AAC のこともあります
-- 動画（`.kt4`）：MP4（映像は VP9）と、MP4 の外に持つ KTC の音声。古いファイルでは、音声は MP4 の中の Opus です
-- ループ（最大 10 個）：開始と終了（秒・64 ビット浮動小数点数）、クロスフェード、名前（任意）
+- 音声（`.kt3`）：[KTC](https://github.com/KEITO00/ktc)（主に KT3 での利用を目的とした独自の音声圧縮方式）。古いファイルでは、Ogg Opus・MP3・Ogg Vorbis・WAV・AAC の場合もあります
+- 動画（`.kt4`）：MP4（映像は VP9）と、MP4 の外に格納する KTC の音声。古いファイルでは、音声は MP4 内の Opus です
+- ループ（最大 10 個）：開始位置と終了位置（秒・64 ビット浮動小数点数）、クロスフェード、名前（任意）
 - 歌詞（2 行まで）
 - BPM、拍の位置、拍子の変化
 - サビの区間、火花のタイミング
@@ -67,13 +67,13 @@ You can implement the format in your own software. See [LICENSE](LICENSE).
 
 ### `.kt4` の動画（version 6 以降）
 
-絵が十分に変わった所にキーフレームを置き、それ以外のコマは直前のキーフレームだけを参照します。
+映像が十分に変化した位置にキーフレームを配置し、それ以外のフレームは直前のキーフレームだけを参照します。
 
-- どのコマも、最大 2 つのサンプルから作れます。
-  - そのため、移動やスクラッチが軽く済みます。
+- 任意のフレームを、最大 2 つのサンプルからデコードできます。
+  - そのため、シークやスクラッチの処理負荷を低く抑えられます。
 - 詳しくは [SPEC.ja.md の 6.3](SPEC.ja.md) を参照してください。
 
 ### ライセンス
 
 仕様は [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.ja) で公開しています。
-自分のソフトに自由に実装できます。詳しくは [LICENSE](LICENSE) を参照してください。
+許可を得ることなく、ソフトウェアに実装できます。詳しくは [LICENSE](LICENSE) を参照してください。
