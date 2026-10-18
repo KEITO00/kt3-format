@@ -5,6 +5,20 @@ KT3 files always use version 1.
 
 ヘッダーの `version` は、KT4 の動画と音声の格納方式を表します。KT3 では常に 1 です。
 
+## Audio after the end of a loop (2026-10-18)
+
+- Writers and players SHOULD treat the continuation of the loop (the audio from the loop start) as the audio that follows the end of the audio.
+  - Writers do this when they compress the audio as KTC, and players do this when they convert the sampling rate.
+  - If the part after the end is treated as silence, a click can be heard at the loop point.
+  - See [SPEC.md §3.1](SPEC.md#31-loops).
+- The `version` byte does not change.
+
+- 書き込み側とプレイヤーは、ループの続きの音（ループの開始位置からの音）を、音声の最後に続く音として扱うべきです（SHOULD）。
+  - 書き込み側は KTC で圧縮する際に、プレイヤーはサンプリング周波数を変換する際に扱います。
+  - 音声の最後より後ろを無音として扱うと、ループのつなぎ目で雑音が聞こえるためです。
+  - [SPEC.ja.md 3.1](SPEC.ja.md) を参照してください。
+- `version` は変更しません。
+
 ## Version 7 (KTC audio) and scene-adaptive anchors (2026-10-07)
 
 - `mediaFormat` 5 means KTC, an audio compression format designed mainly for use with KT3.

@@ -136,6 +136,11 @@ A track can have up to 10 loops.
   - Loop 1 is selected at first.
 - When another loop is selected during playback, a player SHOULD keep playing from the current position and go back to the start of the new loop when it reaches the end of the new loop.
   - If the current position is after the end of the new loop, the player SHOULD move to the start of the new loop right away.
+- When processing the end of the audio, writers and players SHOULD treat the continuation of the loop (the audio from the loop start) as the audio that follows the end.
+  - Writers do this when they compress the audio as KTC (section 4.2 of the [KTC specification](https://github.com/KEITO00/ktc)).
+  - Players do this when they convert the sampling rate.
+  - If the part after the end is treated as silence, a click can be heard at the loop point.
+  - With several loops, the loop whose end is the latest is used. If several loops end at the same point, the first of them in `loops` is used.
 
 ## 4. Lyrics (line 1)
 
